@@ -7,14 +7,16 @@ public class UI : MonoBehaviour
 
 public GameObject PauseMenu;
 public GameObject player;
+public GameObject UIcam;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         PauseMenu.SetActive(false);
-        GameObject player = GameObject.Find("player");
-        player.GetComponent<FirstPersonController>().enabled = true;
+        player.SetActive(true);
+        UIcam.SetActive(false);
+        
     }
 
 
@@ -30,8 +32,14 @@ public GameObject player;
         {
             Time.timeScale = 0;
             PauseMenu.SetActive(true);
-            FirstPersonController fpc = player.GetComponent<FirstPersonController>();
-            fpc.lockCursor = false;
+            player.SetActive(false);
+            UIcam.SetActive(true);
+            
+        }
+        if (Input.GetKey(KeyCode.R))
+        {
+            SceneManager.LoadScene("Level Horror");
+            Time.timeScale = 1;
         }
     }
 }
