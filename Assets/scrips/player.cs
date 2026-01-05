@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using TMPro;
+using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,19 +9,22 @@ public class player : MonoBehaviour
 {
 
     public Transform PlayerCam;
-
-    public bool Invertirtemouse = false; //Mouse
+    public bool Invertirtemouse = false;
     //UI
-    public GameObject UI; 
+    public GameObject PauseUI; 
+    public GameObject EndScrenUI;
+    bool GameIsPaused = false;
 
     //Bewegung
     public float MovementSpeed =0.1F;
     public float gravity = -9.81f;
     public float jumpForce = 5f;
     float velocityY;
+    static bool DoubleJump = false;
+    int JumpsLeft = 1;
     CharacterController controller;
     //Mouse
-    public float RotationSensitivity = 200.0f;
+    public static float RotationSensitivity = 200.0f;
 	public float minAngle = -45.0f;
 	public float maxAngle = 45.0f;
     float yRotate = 0.0f;
@@ -30,7 +34,8 @@ public class player : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        UI.SetActive(false);
+        PauseUI.SetActive(false);
+        EndScrenUI.SetActive(false);
         Time.timeScale = 1f;
 
         controller = GetComponent<CharacterController>();
@@ -51,8 +56,23 @@ public class player : MonoBehaviour
         }
 
         //UI
-        if (Input.GetKey(KeyCode.Escape))
-            Pause();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (GameIsPaused)
+            {
+                UnPause();
+            }
+            else 
+                { 
+                    Pause();
+                }
+        }
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            Reset();
+        }
+         
 
         //Bewgung mit Gravity
         float x = Input.GetAxis("Horizontal");
@@ -63,12 +83,25 @@ public class player : MonoBehaviour
 
         if (controller.isGrounded)
         {
+            if (DoubleJump)
+            JumpsLeft = 2;
+            else
+                JumpsLeft = 1;
+        }
+
+        if (controller.isGrounded || JumpsLeft > 0)
+        {
             if (velocityY <= 0)
                 velocityY = -2f; 
 
            
             if (Input.GetButtonDown("Jump"))
+            {
                 velocityY = jumpForce;
+                JumpsLeft -=1;
+            }
+               
+
         }
 
         
@@ -95,23 +128,42 @@ public class player : MonoBehaviour
     public void Pause()
     {
         Cursor.lockState = CursorLockMode.None;
-        UI.SetActive(true);
+        GameIsPaused = true;
+        PauseUI.SetActive(true);
         Time.timeScale = 0f;
     }
 
     public void UnPause()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        UI.SetActive(false);
+        GameIsPaused = false;
+        PauseUI.SetActive(false);
         Time.timeScale = 1f;
+    }
+
+    public void Reset()
+    {
+        SceneManager.LoadScene("Level Horror");
+        //EditorSceneManager.OpenScene("Level Horror");
     }
     public void InvertUI()
     {
+        if (Invertirtemouse == false)
         Invertirtemouse = true;
+        else
+            Invertirtemouse = false;
     }
 
     public void SetSensitivity(float value)
     {
         RotationSensitivity = value;
+    }
+
+    public void DoubleJumpUI()
+    {
+        if (DoubleJump == false)
+        DoubleJump = true;
+        else
+            DoubleJump = false;
     }
 }

@@ -4,6 +4,7 @@ using System.Collections;
 public class drop : MonoBehaviour
 {
     public GameObject DopppedObject;
+    public AudioClip DropSound;
     public float speed = 2;
 
     bool Exit = false;
@@ -12,6 +13,7 @@ public class drop : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         Exit = true;
+        GetComponent<AudioSource>().PlayOneShot(DropSound);
         Debug.Log("Still Works");
     }
 
