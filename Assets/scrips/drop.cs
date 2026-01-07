@@ -14,7 +14,6 @@ public class drop : MonoBehaviour
     {
         Exit = true;
         GetComponent<AudioSource>().PlayOneShot(DropSound);
-        Debug.Log("Still Works");
     }
 
     void Update()
