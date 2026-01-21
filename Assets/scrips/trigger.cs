@@ -39,5 +39,3 @@ public class trigger : MonoBehaviour
         }
     }
 }
-
-//lims[4].transform.Rotate(Vector3.forward * speed * -1* Time.deltaTime);
