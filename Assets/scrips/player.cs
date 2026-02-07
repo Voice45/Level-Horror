@@ -16,7 +16,8 @@ public class player : MonoBehaviour
     bool GameIsPaused = false;
 
     //Bewegung
-    public float MovementSpeed =0.1F;
+    public float MovementSpeed =10;
+    bool isSneak = false;
     public float gravity = -9.81f;
     public float jumpForce = 5f;
     float velocityY;
@@ -72,7 +73,8 @@ public class player : MonoBehaviour
         {
             Reset();
         }
-         
+
+            sneak();
 
         //Bewgung mit Gravity
         float x = Input.GetAxis("Horizontal");
@@ -102,6 +104,25 @@ public class player : MonoBehaviour
             }
                
 
+        }
+
+        void sneak()
+        {
+            if (isSneak)
+                {
+                MovementSpeed = 2;
+                transform.localScale = new Vector3(1f, .6f, 1f);
+                }
+            else
+                {
+                MovementSpeed =10;
+                transform.localScale = new Vector3(1f, 1f, 1f);
+                }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+                isSneak = true;
+            if (Input.GetKeyUp(KeyCode.LeftShift))
+                isSneak = false;
         }
 
         

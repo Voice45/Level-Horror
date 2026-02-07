@@ -5,12 +5,12 @@ public class drop : MonoBehaviour
 {
     public GameObject DopppedObject;
     public AudioClip DropSound;
-    public float speed = 2;
+    public float speed = 1;
 
     bool Exit = false;
 
 
-    void OnTriggerExit(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         Exit = true;
         GetComponent<AudioSource>().PlayOneShot(DropSound);
