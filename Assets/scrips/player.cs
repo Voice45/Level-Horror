@@ -91,19 +91,16 @@ public class player : MonoBehaviour
                 JumpsLeft = 1;
         }
 
-        if (controller.isGrounded || JumpsLeft > 0)
+        if (JumpsLeft > 0)
         {
-            if (velocityY <= 0)
+            if (velocityY <= 0 && !controller.isGrounded)
                 velocityY = -2f; 
-
            
-            if (Input.GetButtonDown("Jump"))
+            if (controller.isGrounded && Input.GetButtonDown("Jump"))
             {
                 velocityY = jumpForce;
                 JumpsLeft -=1;
             }
-               
-
         }
 
         void sneak()
@@ -119,9 +116,9 @@ public class player : MonoBehaviour
                 transform.localScale = new Vector3(1f, 1f, 1f);
                 }
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.LeftControl))
                 isSneak = true;
-            if (Input.GetKeyUp(KeyCode.LeftShift))
+            if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.LeftControl))
                 isSneak = false;
         }
 
